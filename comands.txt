@@ -1,0 +1,23 @@
+az --version
+
+create identity 
+{
+  "appId": "ceb47274-690e-4fb1-b8ed-678896814b85",       
+  "displayName": "azure-cli-2024-09-20-22-03-35",        
+  "password": "JVh8Q~hXzH~B04rEOS_0sL4JNmb2OO3irzVqJc03",
+  "tenant": "1e53f38c-6619-4d99-8849-7198f576f3ac"       
+}
+
+
+crear grupo
+az group create --name devops-springboot-tcs-rg --location eastus
+
+Desplegar el ARM template
+az deployment group create --resource-group devops-springboot-tcs-rg --template-file azure-arm-template.json --parameters azuredeploy.parameters.json
+
+
+Asignar permisos al ACR para la identidad gestionado
+az role assignment create \
+  --assignee $(az identity show --name aks-identity --resource-group devops-springboot-tcs-rg --query principalId --output tsv) \
+  --role AcrPull \
+  --scope $(az acr show --name devopsspringbootacr --resource-group devops-springboot-tcs-rg --query id --output tsv)
