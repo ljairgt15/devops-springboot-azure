@@ -1,16 +1,17 @@
 package com.ljairgt15.devops_tcs.Filter;
 
-
 import com.ljairgt15.devops_tcs.util.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 
 @Component
 public class JwtAndApiKeyFilter extends OncePerRequestFilter {
@@ -25,7 +26,8 @@ public class JwtAndApiKeyFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         // Validar si la solicitud es OPTIONS
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
@@ -69,6 +71,5 @@ public class JwtAndApiKeyFilter extends OncePerRequestFilter {
 
         // Continuar con el procesamiento del filtro
         filterChain.doFilter(request, response);
-
     }
 }
