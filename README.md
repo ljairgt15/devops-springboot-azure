@@ -1,7 +1,7 @@
 # devops-springboot-azure
 In order to complete devops exercise for TCS
 ---
-evOps Springboot TCS Project
+DevOps Springboot TCS Project
 Project Description
 This project implements a Spring Boot application with an automated CI/CD pipeline using Azure DevOps for building, packaging, and deploying a Docker image on an Azure Kubernetes Service (AKS) cluster. The goal is to automate the lifecycle of an application, from build to deployment, in a containerized environment using AKS.
 
