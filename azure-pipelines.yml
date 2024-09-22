@@ -1,0 +1,29 @@
+trigger:
+  branches:
+    include:
+      - main  
+
+variables:
+  dockerRegistryServiceConnection: 'acrdevops'  # Nombre de la conexión al ACR en Azure DevOps
+  imageRepository: 'tcs'  # Nombre del repositorio de la imagen en ACR
+  containerRegistry: 'acrdevops.azurecr.io'  # Dirección de tu ACR
+  dockerfilePath: 'devops-tcs/Dockerfile'  # Ruta de tu Dockerfile en el proyecto
+
+stages:
+  - stage: BuildAndPush
+    displayName: 'Compilar y Push al ACR'
+    jobs:
+      - job: Build
+        displayName: 'Compilar y Push Imagen Docker a ACR'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+          - task: Docker@2
+            inputs:
+              containerRegistry: '$(dockerRegistryServiceConnection)'
+              repository: '$(imageRepository)'
+              command: 'buildAndPush'
+              Dockerfile: '$(dockerfilePath)'
+              tags: |
+                $(Build.BuildId)
