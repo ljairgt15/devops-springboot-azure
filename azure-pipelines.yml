@@ -1,29 +1,72 @@
 trigger:
   branches:
     include:
-      - main  
+      - main 
 
+# Definir las variables de entorno
 variables:
-  dockerRegistryServiceConnection: 'acrdevops'  # Nombre de la conexión al ACR en Azure DevOps
-  imageRepository: 'tcs'  # Nombre del repositorio de la imagen en ACR
+  dockerRegistryServiceConnection: 'acr_connection'  # Service Connection para ACR
+  imageRepository: 'tcs'  # Nombre del repositorio de imágenes en ACR
   containerRegistry: 'acrdevops.azurecr.io'  # Dirección de tu ACR
-  dockerfilePath: 'devops-tcs/Dockerfile'  # Ruta de tu Dockerfile en el proyecto
+  kubernetesServiceConnection: 'aks_cluster_connection'  # Service Connection para AKS
+  aksClusterName: 'aks-cluster-devops-tcs'  # Nombre del cluster AKS
+  aksResourceGroup: 'devops-springboot-tcs-rg'  # Grupo de recursos de AKS
+  namespace: 'default'  # Namespace en AKS donde se desplegará la imagen
+  dockerfilePath: 'devops-tcs/Dockerfile'  # Ruta del archivo Dockerfile
 
 stages:
-  - stage: BuildAndPush
-    displayName: 'Compilar y Push al ACR'
+  - stage: Deploy
+    displayName: 'Deploy to AKS'
     jobs:
-      - job: Build
-        displayName: 'Compilar y Push Imagen Docker a ACR'
+      - deployment: Deploy
+        displayName: 'Deploy to AKS'
+        environment: 'aks'
         pool:
           vmImage: 'ubuntu-latest'
-        steps:
-          - checkout: self
-          - task: Docker@2
-            inputs:
-              containerRegistry: '$(dockerRegistryServiceConnection)'
-              repository: '$(imageRepository)'
-              command: 'buildAndPush'
-              Dockerfile: '$(dockerfilePath)'
-              tags: |
-                $(Build.BuildId)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                # Instalar kubectl en el agente
+                - task: Kubernetes@1
+                  displayName: 'Install kubectl'
+                  inputs:
+                    connectionType: 'Kubernetes Service Connection'
+                    kubernetesServiceEndpoint: 'KubernetesTCS'
+                    namespace: 'default'
+                    command: 'installKubectl'
+                    secretType: 'dockerRegistry'
+                    containerRegistryType: 'Azure Container Registry'
+
+                # Actualizar el deployment en AKS
+                - task: Kubernetes@1
+                  displayName: 'Deploy to AKS'
+                  inputs:
+                    connectionType: 'Kubernetes Service Connection'
+                    kubernetesServiceEndpoint: 'KubernetesTCS'
+                    namespace: '$(namespace)'
+                    command: 'apply'
+                    useConfigurationFile: true
+                    configurationType: 'inline'
+                    inline: |
+                      apiVersion: apps/v1
+                      kind: Deployment
+                      metadata:
+                        name: tcs-deployment  # Reemplaza por el nombre de tu deployment
+                      spec:
+                        replicas: 1
+                        selector:
+                          matchLabels:
+                            app: test-app-tcs
+                        template:
+                          metadata:
+                            labels:
+                              app: test-app-tcs
+                          spec:
+                            containers:
+                            - name: tcs-contenedor
+                              image: $(containerRegistry)/$(imageRepository):$(Build.BuildId)
+                              ports:
+                              - containerPort: 8080
+                    secretType: 'dockerRegistry'
+                    containerRegistryType: 'Azure Container Registry'
