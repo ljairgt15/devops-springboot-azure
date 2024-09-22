@@ -32,7 +32,7 @@ stages:
                   displayName: 'Install kubectl'
                   inputs:
                     connectionType: 'Kubernetes Service Connection'
-                    kubernetesServiceEndpoint: 'KubernetesTCS'
+                    kubernetesServiceEndpoint: '$(kubernetesServiceConnection)'
                     namespace: 'default'
                     command: 'installKubectl'
                     secretType: 'dockerRegistry'
@@ -43,7 +43,7 @@ stages:
                   displayName: 'Deploy to AKS'
                   inputs:
                     connectionType: 'Kubernetes Service Connection'
-                    kubernetesServiceEndpoint: 'KubernetesTCS'
+                    kubernetesServiceEndpoint: '$(kubernetesServiceConnection)'
                     namespace: '$(namespace)'
                     command: 'apply'
                     useConfigurationFile: true
