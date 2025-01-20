@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf().disable() // Deshabilitar CSRF solo para simplificar las pruebas
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/DevOps").permitAll()  // Permitir acceso a /DevOps
+                                .requestMatchers("/DevOps/**").permitAll()  // Permitir acceso publico a /DevOps
                                 .anyRequest().authenticated()  // Requerir autenticación para cualquier otro endpoint
                 )
                 .addFilterBefore(jwtAndApiKeyFilter, UsernamePasswordAuthenticationFilter.class);

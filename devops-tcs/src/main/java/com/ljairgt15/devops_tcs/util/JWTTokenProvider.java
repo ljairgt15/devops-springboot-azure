@@ -19,6 +19,7 @@ public class JWTTokenProvider {
 
     @Value("${jwt.secret}")
     private String secret;
+    // same secret
 
     public String getSubject(String token) {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
