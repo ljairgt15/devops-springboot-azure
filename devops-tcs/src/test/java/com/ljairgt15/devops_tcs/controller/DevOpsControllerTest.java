@@ -1,5 +1,7 @@
 package com.ljairgt15.devops_tcs.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.ljairgt15.devops_tcs.configuration.SecurityConfig;
 import com.ljairgt15.devops_tcs.models.dto.DevOpsResponseDTO;
 import com.ljairgt15.devops_tcs.util.JWTGenerator;
@@ -32,11 +34,20 @@ class DevOpsControllerTest {
     @MockBean
     private JWTTokenProvider jwtTokenProvider;
 
+    String generateMockToken() {
+        return JWT.create()
+                .withSubject("TestUser")
+                .withIssuer("MockIssuer")
+                // No incluir withExpiresAt
+                .sign(Algorithm.HMAC256("secret-key"));
+    }
+
+
 
 
     @BeforeEach
     void setUp() {
-        when(jwtGenerator.generateToken()).thenReturn("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKYWlyIEdvbWV6IiwiaXNzIjoiVENTLmRldm9wc2F6dXJlIiwiZXhwIjoxNzM3NTgxNjA4LCJpYXQiOjE3Mzc1NzgwMDh9.7SCN0xpcQfsTK5uPF6tC88ZDHYANgDvohrA9CyKnXXA");
+        when(jwtGenerator.generateToken()).thenReturn(generateMockToken());
         when(jwtTokenProvider.getSubject(anyString())).thenReturn("expected-username");
         when(jwtTokenProvider.isTokenValid(anyString(),anyString())).thenReturn(true);
     }
