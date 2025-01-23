@@ -14,19 +14,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+/*
     @Autowired
     private JwtAndApiKeyFilter jwtAndApiKeyFilter;
+ */
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable() // Deshabilitar CSRF solo para simplificar las pruebas
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/DevOps/**").permitAll()  // Permitir acceso publico a /DevOps
-                                .anyRequest().authenticated()  // Requerir autenticación para cualquier otro endpoint
+                                //.requestMatchers("/DevOps/**").permitAll()  // Permitir acceso publico a /DevOps
+                                .anyRequest().permitAll()  // Requerir autenticación para cualquier otro endpoint
                 )
-                .addFilterBefore(jwtAndApiKeyFilter, UsernamePasswordAuthenticationFilter.class);
+        //.addFilterBefore(jwtAndApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
 
         return http.build();
     }
