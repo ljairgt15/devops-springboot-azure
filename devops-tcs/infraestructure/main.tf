@@ -1,5 +1,6 @@
 provider "azurerm" {
   features {}
+  subscription_id = "3b08a16e-6330-405e-b1ef-56fcef3fda51"
 }
 #PROVEEDOR AZURE RESOURCE MANAGER PARA LA CREACION DE RECURSOS
 /*
@@ -41,12 +42,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 # Crear una instancia de API Management
 resource "azurerm_api_management" "apim" {
-  name                = "DevOpsAPIM"
+  name                = "DevOpsAPIMa"
   location            = "eastus2"
   resource_group_name = "devops"
   publisher_name      = "DevOpsTeam"
   publisher_email     = "jair.gomez@improve-it.com.ec"
-  sku_name            = "Consumption" # Más económico para pruebas
+  sku_name            = "Developer_1"
+  #Más económico para pruebas
 
   tags = {
     environment = "DevOpsChallenge"
@@ -59,12 +61,12 @@ resource "azurerm_api_management_api" "api" {
   resource_group_name = "devops"
   api_management_name = azurerm_api_management.apim.name
   revision            = "1"
-  display_name        = "DevOps API"
+  display_name        = "DevOpsAPI"
   path                = "DevOps"
   protocols           = ["https"]
 
   import {
     content_format = "swagger-link-json"
-    content_value  = "https://raw.githubusercontent.com/user/repo/master/swagger.json" # TODO JG Cambia esto si tienes un swagger local
+    content_value  = "http://localhost:8080/v3/api-docs" # TODO JG Cambia esto si tienes un swagger local
   }
 }
