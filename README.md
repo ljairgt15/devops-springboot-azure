@@ -26,3 +26,16 @@ I typically work with enterprise tenants that have sufficient quotas to handle s
 If you would like to try the project yourself, please ensure you have an active Azure subscription with adequate resources to deploy to AKS. The pipeline is already configured, and it should work once the cluster and service are properly set up.
 
 I apologize for any inconvenience caused by these infrastructure limitations. I hope the rest of the project is helpful and demonstrates the necessary technical skills.
+
+## Infraestructura
+
+Este proyecto incluye la configuración de la infraestructura como código usando Terraform.
+
+### Requisitos
+- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads)
+- Azure CLI instalado y autenticado
+
+### Configuración de la Infraestructura
+1. Navegar a la carpeta `infrastructure`:
+   ```bash
+   cd infrastructure

@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@Component
+//@Component
 public class JwtAndApiKeyFilter extends OncePerRequestFilter {
 
     private final JWTTokenProvider jwtTokenProvider;
