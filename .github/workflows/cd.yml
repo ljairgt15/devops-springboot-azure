@@ -17,6 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+        
+      - name: Debug AZURE_CREDENTIALS
+        run: echo "${{ secrets.AZURE_CREDENTIALS }}"
+
+
       # Paso 2: Iniciar sesión en Azure
       - name: Log in to Azure
         uses: azure/login@v1
