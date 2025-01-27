@@ -28,6 +28,7 @@ jobs:
 
       # Paso 3: Ejecutar Maven para compilar y probar
       - name: Build and Test with Maven
+        working-directory: ./devops-tcs # Ruta relativa a la carpeta del proyecto
         run: mvn clean package -DskipTests=false
 
   docker_build_and_push:
@@ -50,6 +51,7 @@ jobs:
 
       # Paso 3: Construir y subir la imagen Docker
       - name: Build and Push Docker Image
+        working-directory: ./devops-tcs # Ruta relativa a la carpeta del proyecto
         run: |
           docker build -t devopsregistry.azurecr.io/devops-api:latest .
           docker push devopsregistry.azurecr.io/devops-api:latest
