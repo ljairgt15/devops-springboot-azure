@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: devops-api
-          image: registrai.azurecr.io/devops-api:latest
+          image: registrai.azurecr.io/devops-tcs-api:latest
           ports:
             - containerPort: 8080
           env:
