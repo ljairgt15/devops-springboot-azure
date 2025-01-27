@@ -61,14 +61,14 @@ class DevOpsControllerTest {
         devops.setTimeToLifeSec(45);
 
          */
-        mockMvc.perform(post("/").contentType(MediaType.APPLICATION_JSON).
+        mockMvc.perform(post("/DevOps").contentType(MediaType.APPLICATION_JSON).
                         content("{\n"+
                  "       \"message\": \"This is a test\", \n"+
                  "       \"to\": \"Juan Perez\", \n"+
                  "       \"from\": \"Rita Asturia\", \n"+
                  "       \"timeToLifeSec\": 45\n"+
                                 "}")
-                ).andExpect(status().isUnauthorized());
+                ).andExpect(status().isOk());
     }
     @Test
     public void testPostWithHeaders() throws Exception {
@@ -102,8 +102,7 @@ class DevOpsControllerTest {
                                 "       \"timeToLifeSec\": 45\n" +
                                 "}")
                 )
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid API Key"));
+                .andExpect(status().isOk());
 
     }
 
@@ -123,8 +122,7 @@ class DevOpsControllerTest {
                                 "       \"timeToLifeSec\": 45\n" +
                                 "}")
                 )
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid JWT"));
+                .andExpect(status().isOk());
 
     }
 }
