@@ -1,0 +1,38 @@
+name: CD Pipeline
+
+# Ejecutar el pipeline al hacer push a la rama 'main' o manualmente
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permitir ejecución manual del pipeline
+
+jobs:
+  deploy_to_aks:
+    name: Deploy to AKS
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Clonar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Paso 2: Iniciar sesión en Azure
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Paso 3: Configurar Kubectl para AKS
+      - name: Set up kubectl
+        uses: azure/aks-set-context@v2
+        with:
+          resource-group: devops
+          cluster-name: DevOpsAKS
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Paso 4: Desplegar en AKS usando los archivos YAML
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -f ./devops-tcs/deployment.yaml
+          kubectl apply -f ./devops-tcs/service.yaml
