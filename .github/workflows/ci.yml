@@ -53,5 +53,5 @@ jobs:
       - name: Build and Push Docker Image
         working-directory: ./devops-tcs # Ruta relativa a la carpeta del proyecto
         run: |
-          docker build -t devopsregistry.azurecr.io/devops-api:latest .
-          docker push devopsregistry.azurecr.io/devops-api:latest
+          docker build -t registrai.azurecr.io/devops-tcs-api:latest .
+          docker push registrai.azurecr.io/devops-tcs-api:latest
