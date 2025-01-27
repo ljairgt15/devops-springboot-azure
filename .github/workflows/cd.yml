@@ -39,5 +39,5 @@ jobs:
       # Paso 4: Desplegar en AKS usando los archivos YAML
       - name: Deploy to AKS
         run: |
-          kubectl apply -f ./devops-tcs/deployment.yaml
-          kubectl apply -f ./devops-tcs/service.yaml
+          kubectl apply -f ./devops-tcs/deployment/deployment.yaml
+          kubectl apply -f ./devops-tcs/deployment/service.yaml
