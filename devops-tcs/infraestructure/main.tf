@@ -57,16 +57,17 @@ resource "azurerm_api_management" "apim" {
 
 # Crear una API en el API Management para el balanceo
 resource "azurerm_api_management_api" "api" {
-  name                = "DevOpsAPI"
+  name                = "devopsapi"
   resource_group_name = "devops"
   api_management_name = azurerm_api_management.apim.name
   revision            = "1"
   display_name        = "DevOpsAPI"
   path                = "DevOps"
-  protocols           = ["https"]
-
+  protocols           = ["http"]
+#COMO PONER OPCION OPE API EN INTERFAZ DE AZURE VIDEO 2. Use Open API (Swagger) in Azure API Management for Power Apps and Power Automate
+  #Deepak Shrivastava
   import {
     content_format = "swagger-link-json"
-    content_value  = "http://localhost:8080/v3/api-docs" # TODO JG Cambia esto si tienes un swagger local
+    content_value  = "http://4.152.163.253/v3/api-docs" # TODO JG Cambia esto si tienes un swagger local
   }
 }
